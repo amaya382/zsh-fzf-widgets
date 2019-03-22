@@ -12,3 +12,11 @@ Zsh widgets for fzf. You can bind what you want to a key you want.
 |`fzf-kill-proc-by-list`|Select process id from list|`Enter: kill`<br>`Tab: Paste to buffer`|
 |`fzf-kill-proc-by-port`|Select process id from port num (w/ sudo)|`Enter: kill`<br>`Tab: Paste to buffer`|
 
+## Usage (w/ zplug)
+`.zshrc`
+```zsh
+zplug "amaya382/zsh-fzf-widgets"
+bindkey '^R' fzf-cdr
+bindkey '^H' fzf-history
+```
+
