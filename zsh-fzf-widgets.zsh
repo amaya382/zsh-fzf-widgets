@@ -20,7 +20,7 @@ fzf-cd() {
   if [[ -n "$dir" ]]; then
     if [[ "$dir" =~ '^cd (.+)$' ]]
     then
-      $dir
+      ${=dir}
       zle reset-prompt
     else
       LBUFFER="$dir"
@@ -49,7 +49,7 @@ fzf-cdr() {
   if [[ -n "$dir" ]]; then
     if [[ "$dir" =~ '^cd (.+)$' ]]
     then
-      $dir
+      ${=dir}
       zle reset-prompt
     else
       LBUFFER="$dir"
