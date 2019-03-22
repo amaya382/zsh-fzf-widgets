@@ -59,20 +59,26 @@ zle -N fzf-cdr
 
 
 fzf-history() {
-  local selected=($(fc -rl 1 \
+  local res=($(fc -rl 1 \
     | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
       --query=${(qqq)LBUFFER}
       -n2..,..
       --tiebreak=index
-      --bind=ctrl-r:toggle-sort
+      --bind=tab:accept
+      --bind=\"enter:execute@echo -\$(echo {} | sed -e 's/^ //')@+abort\"
       " ${=FZF}))
-  if [ -n "$selected" ]; then
-    local num=$selected[1]
+  if [ -n "$res" ]; then
+    local num=$res[1]
     if [ -n "$num" ]; then
-      zle vi-fetch-history -n $num
+      if [ $num -ge 1 ]; then
+        zle vi-fetch-history -n $num
+        zle reset-prompt
+      else
+        zle vi-fetch-history -n ${num#-}
+        zle accept-line
+      fi
     fi
   fi
-  zle reset-prompt
 }
 zle -N fzf-history
 
