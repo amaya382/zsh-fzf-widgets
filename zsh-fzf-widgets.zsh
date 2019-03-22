@@ -1,6 +1,8 @@
 #!/usr/bin/env zsh
 
-FZF="fzf --ansi"
+: ${FZF_CMD="fzf --ansi"}
+: ${ZSH_FZF_PASTE_KEY=tab}
+: ${ZSH_FZF_EXEC_KEY=enter}
 
 
 fzf-cd() {
@@ -12,9 +14,9 @@ fzf-cd() {
       -o -fstype 'proc' \) -prune -o -type d -print 2> /dev/null | cut -b3- \
       | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
         --query=${(qqq)LBUFFER}
-        --bind=\"tab:execute@echo {}@+abort\"
-        --bind=\"enter:execute@echo 'cd {}'@+abort\"
-        " ${=FZF})
+        --bind=\"${ZSH_FZF_PASTE_KEY}:execute@echo {}@+abort\"
+        --bind=\"${ZSH_FZF_EXEC_KEY}:execute@echo 'cd {}'@+abort\"
+        " ${=FZF_CMD})
   if [[ -n "$dir" ]]; then
     if [[ "$dir" =~ '^cd (.+)$' ]]
     then
@@ -41,9 +43,9 @@ fzf-cdr() {
       done \
     | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
       --query=${(qqq)LBUFFER}
-      --bind=\"tab:execute@echo {}@+abort\"
-      --bind=\"enter:execute@echo 'cd {}'@+abort\"
-      " ${=FZF})
+      --bind=\"${ZSH_FZF_PASTE_KEY}:execute@echo {}@+abort\"
+      --bind=\"${ZSH_FZF_EXEC_KEY}:execute@echo 'cd {}'@+abort\"
+      " ${=FZF_CMD})
   if [[ -n "$dir" ]]; then
     if [[ "$dir" =~ '^cd (.+)$' ]]
     then
@@ -64,9 +66,9 @@ fzf-history() {
       --query=${(qqq)LBUFFER}
       -n2..,..
       --tiebreak=index
-      --bind=tab:accept
-      --bind=\"enter:execute@echo -\$(echo {} | sed -e 's/^ //')@+abort\"
-      " ${=FZF}))
+      --bind=${ZSH_FZF_PASTE_KEY}:accept
+      --bind=\"${ZSH_FZF_EXEC_KEY}:execute@echo -\$(echo {} | sed -e 's/^ //')@+abort\"
+      " ${=FZF_CMD}))
   if [ -n "$res" ]; then
     local num=$res[1]
     if [ -n "$num" ]; then
@@ -88,12 +90,12 @@ fzf-git-checkout() {
   local branches=$(git branch -a --color=always | grep -v HEAD)
   local res=$(echo $branches \
     | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
-      --bind=\"tab:execute@
+      --bind=\"${ZSH_FZF_PASTE_KEY}:execute@
         echo {} | sed -e 's/.* //' -e 's!remotes/[^/]*/!!'@+abort\"
-      --bind=\"enter:execute@
+      --bind=\"${ZSH_FZF_EXEC_KEY}:execute@
         echo git checkout \$(echo {} | sed -e 's/.* //' -e 's!remotes/[^/]*/!!')@+abort\"
       --query=${(qqq)LBUFFER}
-      " ${=FZF})
+      " ${=FZF_CMD})
   if [[ -n "$res" ]]; then
     if [[ "$res" =~ '^git checkout (.+)$' ]]
     then
@@ -116,12 +118,12 @@ fzf-git-log() {
     --no-sort
     --reverse
     --tiebreak=index
-    --bind=\"tab:execute@
+    --bind=\"${ZSH_FZF_PASTE_KEY}:execute@
       echo {} | grep -o '[a-f0-9]\\\{7\\\}' | head -1@+abort\"
-    --bind=\"enter:execute@
+    --bind=\"${ZSH_FZF_EXEC_KEY}:execute@
       git show --color=always \$(echo {} | grep -o '[a-f0-9]\\\{7\\\}' | head -1) \
       | less -R > /dev/tty@\"
-    " ${=FZF})
+    " ${=FZF_CMD})
   if [[ -n "$res" ]]; then
     LBUFFER=$LBUFFER$res
     zle redisplay
@@ -136,8 +138,8 @@ fzf-git-status() {
   | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
     --no-sort
     --reverse
-    --bind=\"tab:execute@echo {} | sed -e 's/^...//'@+abort\"
-    --bind=\"enter:execute@
+    --bind=\"${ZSH_FZF_PASTE_KEY}:execute@echo {} | sed -e 's/^...//'@+abort\"
+    --bind=\"${ZSH_FZF_EXEC_KEY}:execute@
       f=\$(echo {} | sed -e 's/^...//')
       mark=\$(echo {} | grep -oP '^..')
       case \$mark in
@@ -148,7 +150,7 @@ fzf-git-status() {
         A? | ?D) git diff HEAD --color=always -- \$f ;;
         \\?\\?) cat \$f ;;
       esac | less -R > /dev/tty@\"
-    " ${=FZF})
+    " ${=FZF_CMD})
   if [[ -n "$res" ]]; then
     LBUFFER=$LBUFFER$res
     zle redisplay
@@ -163,9 +165,9 @@ fzf-kill-proc-by-list() {
   | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
     --no-sort
     --reverse
-    --bind=\"tab:execute@echo {} | awk '{print \$2}'@+abort\"
-    --bind=\"enter:execute@kill -9 \$(echo {} | awk '{print \$2}')@+abort\"
-  " ${=FZF})
+    --bind=\"${ZSH_FZF_PASTE_KEY}:execute@echo {} | awk '{print \$2}'@+abort\"
+    --bind=\"${ZSH_FZF_EXEC_KEY}:execute@kill -9 \$(echo {} | awk '{print \$2}')@+abort\"
+  " ${=FZF_CMD})
   if [[ -n "$res" ]]; then
     LBUFFER=$LBUFFER$res
     zle redisplay
@@ -180,9 +182,9 @@ fzf-kill-proc-by-port() {
     --query=\'
     --no-sort
     --reverse
-    --bind=\"tab:execute@echo {} | grep -oP '(?<=pid=)\\\d+(?=,)'@+abort\"
-    --bind=\"enter:execute@sudo kill -9 \$(echo {} | grep -oP '(?<=pid=)\\\d+(?=,)')@+abort\"
-  " ${=FZF})
+    --bind=\"${ZSH_FZF_PASTE_KEY}:execute@echo {} | grep -oP '(?<=pid=)\\\d+(?=,)'@+abort\"
+    --bind=\"${ZSH_FZF_EXEC_KEY}:execute@sudo kill -9 \$(echo {} | grep -oP '(?<=pid=)\\\d+(?=,)')@+abort\"
+  " ${=FZF_CMD})
   if [[ -n "$res" ]]; then
     LBUFFER=$LBUFFER$res
     zle redisplay
@@ -194,8 +196,8 @@ zle -N fzf-kill-proc-by-port
 fzf-gitmoji() {
   local res=$(gitmoji -l \
   | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
-    --bind=tab:accept
-  " ${=FZF} \
+    --bind=${ZSH_FZF_PASTE_KEY}:accept
+  " ${=FZF_CMD} \
   | grep -oP ':.+:')
   if [[ -n "$res" ]]; then
     LBUFFER=$LBUFFER$res
