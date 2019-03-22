@@ -184,3 +184,17 @@ fzf-kill-proc-by-port() {
 }
 zle -N fzf-kill-proc-by-port
 
+
+fzf-gitmoji() {
+  local res=$(gitmoji -l \
+  | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
+    --bind=tab:accept
+  " ${=FZF} \
+  | grep -oP ':.+:')
+  if [[ -n "$res" ]]; then
+    LBUFFER=$LBUFFER$res
+    zle redisplay
+  fi
+}
+zle -N fzf-gitmoji
+

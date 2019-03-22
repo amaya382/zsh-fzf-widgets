@@ -11,6 +11,7 @@ Zsh widgets for fzf. You can bind what you want to a key you want.
 |`fzf-git-status`|Show git status|`Enter: Show details`<br>`Tab: Paste to buffer`|
 |`fzf-kill-proc-by-list`|Select process id from list|`Enter: kill`<br>`Tab: Paste to buffer`|
 |`fzf-kill-proc-by-port`|Select process id from port num (w/ sudo)|`Enter: kill`<br>`Tab: Paste to buffer`|
+|`fzf-gitmoji`|Select emoji for git comment|`Enter: Paste to buffer`<br>`Tab: Paste to buffer`|
 
 ## Usage (w/ zplug)
 `.zshrc`
