@@ -5,7 +5,7 @@ Zsh widgets for fzf. You can bind what you want to a key you want.
 |name|description|bind|
 |:--|:--|:--|
 |`fzf-cd`|Select dir under the current working dir|`Enter: cd`<br>`Tab: Paste to buffer`|
-|`fzf-cdr`|Select dir from cdr|`Enter: cd`<br>`Tab: Paste to buffer`|
+|`fzf-cdr`|Select dir from cdr (Not existing dirs will be colored)|`Enter: cd`<br>`Tab: Paste to buffer`|
 |`fzf-history`|Select cmd history|`Enter: exec`<br>`Tab: Paste to buffer`|
 |`fzf-git-checkout`|Select git branch including remote|`Enter: checkout`<br>`Tab: Paste to buffer`|
 |`fzf-git-log`|Show git log|`Enter: Show details`<br>`Tab: Paste to buffer`|
