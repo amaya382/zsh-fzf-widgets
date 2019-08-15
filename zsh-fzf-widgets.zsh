@@ -13,7 +13,6 @@ fzf-cd() {
       -o -fstype 'devtmpfs' \
       -o -fstype 'proc' \) -prune -o -type d -print 2> /dev/null | cut -b3- \
       | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
-        --query=${(qqq)LBUFFER}
         --bind=\"${ZSH_FZF_PASTE_KEY}:execute@echo {}@+abort\"
         --bind=\"${ZSH_FZF_EXEC_KEY}:execute@echo 'cd {}'@+abort\"
         " ${=FZF_CMD})
@@ -23,7 +22,7 @@ fzf-cd() {
       ${=dir}
       zle reset-prompt
     else
-      LBUFFER="$dir"
+      LBUFFER="${LBUFFER}${dir}"
       zle redisplay
     fi
   fi
@@ -42,7 +41,6 @@ fzf-cdr() {
           || echo -e "\e[31m$f\e[m"
       done \
     | FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
-      --query=${(qqq)LBUFFER}
       --bind=\"${ZSH_FZF_PASTE_KEY}:execute@echo {}@+abort\"
       --bind=\"${ZSH_FZF_EXEC_KEY}:execute@echo 'cd {}'@+abort\"
       " ${=FZF_CMD})
@@ -52,7 +50,7 @@ fzf-cdr() {
       ${=dir}
       zle reset-prompt
     else
-      LBUFFER="$dir"
+      LBUFFER="${LBUFFER}${dir}"
       zle redisplay
     fi
   fi
